@@ -1,0 +1,39 @@
+% Native Stata/Mata pt_tables 2.4.0; rendered from saved companion results.
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\ifdefined\PTwidth\else\newlength{\PTwidth}\fi
+\setlength{\PTwidth}{13.600cm}
+\ifdim\PTwidth>\linewidth\setlength{\PTwidth}{\linewidth}\fi
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Ordinary regression with multiple displayed covariates}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.336842\PTwidth-\tabcolsep\relax}*{3}{>{\centering\arraybackslash}p{\dimexpr0.221053\PTwidth-2\tabcolsep\relax}}@{}}
+\toprule
+\multicolumn{4}{@{}>{\centering\arraybackslash}p{\PTwidth}@{}}{\textbf{OLS with heteroskedasticity-robust standard errors}} \\*
+\hline
+ & Price & Trunk space (cu. ft.) & Turn circle (ft.) \\*
+\hline
+Foreign origin & 3573.1$^{***}$ & 0.677 & -1.74$^{***}$ \\*
+ & (647.6) & (0.965) & (0.612) \\*
+ & [0.001] & [0.194] & [0.006] \\
+Weight (lb.) & 5.77$^{***}$ & -0.001 & 0.002$^{**}$ \\*
+ & (1.50) & (0.001) & (0.001) \\*
+ & [0.001] & [0.220] & [0.049] \\
+Length (inches) & -91.37$^{*}$ & 0.167$^{***}$ & 0.097$^{***}$ \\*
+ & (48.18) & (0.034) & (0.026) \\*
+ & [0.022] & [0.001] & [0.001] \\
+\hline
+Control mean & 6072.4 & 14.75 & 41.44 \\
+\hline
+N & 74 & 74 & 74 \\
+\hline
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\footnotesize
+\item \textit{Notes:} * $p<0.10$, ** $p<0.05$, *** $p<0.01$, using conventional p-values. Standard errors appear in round brackets. Square brackets contain sharpened q-values. Stata's 1978 automobile data. Each outcome is regressed on foreign origin, weight and length; all slopes are displayed. These covariates are not treatment arms, and no equality tests are requested. Standard errors are heteroskedasticity-robust with finite-df t inference. No weights or fixed effects. Control mean denotes the domestic-car outcome mean within each model's estimation sample. N counts cars. Observational associations, not causal estimates. Anderson/BKY sharpened q-values use the .001 grid across all three outcomes separately for each covariate. RI is inapplicable.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\endgroup

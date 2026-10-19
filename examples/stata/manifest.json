@@ -1,0 +1,17 @@
+[
+  "standard",
+  "shared",
+  "different_samples",
+  "unknown_samples",
+  "different_outcomes",
+  "summary",
+  "long_labels",
+  "multipage",
+  "wide_multipage",
+  "panel_continuation",
+  "grouped_regression",
+  "grouped_regression_multipage",
+  "auto_summary",
+  "auto_summary_repair_panels",
+  "ordinary_regression"
+]

@@ -1,0 +1,34 @@
+% Native Stata/Mata pt_tables 2.4.0; rendered from saved companion results.
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\ifdefined\PTwidth\else\newlength{\PTwidth}\fi
+\setlength{\PTwidth}{13.600cm}
+\ifdim\PTwidth>\linewidth\setlength{\PTwidth}{\linewidth}\fi
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Long labels \& special characters: 100\% preserved}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.432432\PTwidth-\tabcolsep\relax}*{2}{>{\centering\arraybackslash}p{\dimexpr0.283784\PTwidth-2\tabcolsep\relax}}@{}}
+\toprule
+\multicolumn{3}{@{}>{\centering\arraybackslash}p{\PTwidth}@{}}{\textbf{Summary by assigned group}} \\*
+\hline
+ & \multicolumn{2}{>{\centering\arraybackslash}p{\dimexpr0.567568\PTwidth-2\tabcolsep\relax}}{Group 0: a deliberately long group heading to test wrapping} \\*
+\cmidrule(lr){2-3}
+ & Mean (SD) & N \\*
+\hline
+Endline outcome 1: expenditure, assets \& income (100\% scale) & 0.089 & 40 \\*
+ & (1.19) &  \\
+Endline outcome 2: expenditure, assets \& income (100\% scale) & 38.53 & 27 \\*
+ & (9.37) &  \\
+Endline outcome 3: expenditure, assets \& income (100\% scale) & 194.7 & 40 \\*
+ & (49.74) &  \\
+\hline
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\footnotesize
+\item \textit{Notes:} Synthetic endline outcomes defined in examples/stata/data.do; arm 0 is control. Unweighted N, arithmetic mean and sample SD from Stata summarize. Counts are variable-specific available observations; y2 has missing values. No inferential comparisons.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\endgroup

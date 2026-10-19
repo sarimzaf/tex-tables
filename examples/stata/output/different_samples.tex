@@ -1,0 +1,51 @@
+% Native Stata/Mata pt_tables 2.4.0; rendered from saved companion results.
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\ifdefined\PTwidth\else\newlength{\PTwidth}\fi
+\setlength{\PTwidth}{13.600cm}
+\ifdim\PTwidth>\linewidth\setlength{\PTwidth}{\linewidth}\fi
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Synthetic treatment-effect demonstration}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.336842\PTwidth-\tabcolsep\relax}*{3}{>{\centering\arraybackslash}p{\dimexpr0.221053\PTwidth-2\tabcolsep\relax}}@{}}
+\toprule
+\multicolumn{4}{@{}>{\centering\arraybackslash}p{\PTwidth}@{}}{\textbf{Panel 1: Specification 1}} \\*
+\hline
+ & Synthetic endline outcome 1 & Synthetic endline outcome 2 & Synthetic endline outcome 3 \\*
+\hline
+Treatment arm 1 & -0.068 & 2.33 & 85.23$^{***}$ \\*
+ & (0.234) & (2.27) & (11.76) \\*
+ & [0.856] & [0.444] & [0.001] \\
+Treatment arm 2 & 0.308 & 4.01$^{*}$ & 122.1$^{***}$ \\*
+ & (0.249) & (2.20) & (11.94) \\*
+ & [0.119] & [0.077] & [0.001] \\
+p-value: Treatment 1 = Treatment 2 & 0.081 & 0.376 & 0.004 \\
+\hline
+Control mean & 0.089 & 38.53 & 194.7 \\
+\hline
+N & 120 & 107 & 120 \\
+\midrule
+\multicolumn{4}{@{}>{\centering\arraybackslash}p{\PTwidth}@{}}{\textbf{Panel 3: Specification 3}} \\*
+\hline
+Treatment arm 1 & -0.002 & 2.24 & 74.26$^{***}$ \\*
+ & (0.227) & (2.04) & (12.02) \\*
+ & [0.701] & [0.379] & [0.001] \\
+Treatment arm 2 & 0.387 & 5.35$^{***}$ & 117.5$^{***}$ \\*
+ & (0.263) & (1.83) & (11.50) \\*
+ & [0.051] & [0.005] & [0.001] \\
+p-value: Treatment 1 = Treatment 2 & 0.072 & 0.057 & 0.000 \\
+\hline
+Control mean & 0.055 & 37.92 & 196.8 \\
+\hline
+N & 110 & 98 & 110 \\
+\hline
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\footnotesize
+\item \textit{Notes:} * $p<0.10$, ** $p<0.05$, *** $p<0.01$, using conventional p-values. Standard errors appear in round brackets. Square brackets contain sharpened q-values. Synthetic examples, not empirical findings. Outcome definitions and data generation are in examples/stata/data.do. OLS with heteroskedasticity-robust standard errors; specification 1 has no additional controls; specification 3 controls for xmiss. No fixed effects or weights. Sharpened q-values use Anderson (2008) and BKY (2006), conventional p-values, a .001 grid and a complete outcome family for each panel and treatment effect. No RI was run. Control means use arm=0 at endline in each model's estimation sample; missing model variables are excluded model by model. Equality-test rows report unadjusted robust Wald F p-values for treatment 1 versus each other treatment, using the model covariance and residual degrees of freedom.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\endgroup

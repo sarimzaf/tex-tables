@@ -1,0 +1,48 @@
+% Native Stata/Mata pt_tables 2.4.0; rendered from saved companion results.
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\ifdefined\PTwidth\else\newlength{\PTwidth}\fi
+\setlength{\PTwidth}{13.400cm}
+\ifdim\PTwidth>\linewidth\setlength{\PTwidth}{\linewidth}\fi
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Vehicle characteristics by origin}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.373134\PTwidth-\tabcolsep\relax}*{4}{>{\centering\arraybackslash}p{\dimexpr0.156716\PTwidth-2\tabcolsep\relax}}@{}}
+\toprule
+\multicolumn{5}{@{}>{\centering\arraybackslash}p{\PTwidth}@{}}{\textbf{Vehicle characteristics by origin}} \\*
+\hline
+ & \multicolumn{2}{>{\centering\arraybackslash}p{\dimexpr0.313433\PTwidth-2\tabcolsep\relax}}{Domestic} & \multicolumn{2}{>{\centering\arraybackslash}p{\dimexpr0.313433\PTwidth-2\tabcolsep\relax}}{Foreign} \\*
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+ & Mean (SD) & N & Mean (SD) & N \\*
+\hline
+Price & 6072.4 & 52 & 6384.7 & 22 \\*
+ & (3097.1) &  & (2621.9) &  \\
+Mileage (mpg) & 19.83 & 52 & 24.77 & 22 \\*
+ & (4.74) &  & (6.61) &  \\
+Repair record 1978 & 3.02 & 48 & 4.29 & 21 \\*
+ & (0.838) &  & (0.717) &  \\
+Headroom (in.) & 3.15 & 52 & 2.61 & 22 \\*
+ & (0.916) &  & (0.486) &  \\
+Trunk space (cu. ft.) & 14.75 & 52 & 11.41 & 22 \\*
+ & (4.31) &  & (3.22) &  \\
+Weight (lbs.) & 3317.1 & 52 & 2315.9 & 22 \\*
+ & (695.4) &  & (433.0) &  \\
+Length (in.) & 196.1 & 52 & 168.5 & 22 \\*
+ & (20.05) &  & (13.68) &  \\
+Turn circle (ft.) & 41.44 & 52 & 35.41 & 22 \\*
+ & (3.97) &  & (1.50) &  \\
+Displacement (cu. in.) & 233.7 & 52 & 111.2 & 22 \\*
+ & (85.26) &  & (24.88) &  \\
+Gear ratio & 2.81 & 52 & 3.51 & 22 \\*
+ & (0.336) &  & (0.297) &  \\
+\hline
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\footnotesize
+\item \textit{Notes:} Stata's 1978 automobile data. Price is in dollars and mileage in miles per gallon. Arithmetic means with sample SDs in parentheses and variable-specific N; no weights or inferential comparisons. Domestic means foreign=0; foreign means foreign=1. Missing observations are excluded separately for each variable and group. Repair record is the stored ordinal 1978 rating; its mean and SD describe the numeric coding. Labels retain the dataset's units: headroom in inches, trunk volume in cubic feet, weight in pounds, length in inches, turning circle in feet, displacement in cubic inches, and gear ratio as a ratio.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\endgroup

@@ -1,0 +1,4 @@
+# Optional log/TeX checks and PDF verification. Estimation and export use Stata only.
+pandas>=2.2,<4
+pypdfium2>=4,<6
+Pillow>=10,<13

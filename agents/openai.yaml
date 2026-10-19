@@ -1,0 +1,3 @@
+interface:
+  display_name: "tex-tables"
+  short_description: "Validated Stata results and publication LaTeX tables"

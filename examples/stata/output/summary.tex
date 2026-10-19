@@ -1,0 +1,34 @@
+% Native Stata/Mata pt_tables 2.4.0; rendered from saved companion results.
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\ifdefined\PTwidth\else\newlength{\PTwidth}\fi
+\setlength{\PTwidth}{15.800cm}
+\ifdim\PTwidth>\linewidth\setlength{\PTwidth}{\linewidth}\fi
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Summary statistics with variable-specific N}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.202532\PTwidth-\tabcolsep\relax}*{6}{>{\centering\arraybackslash}p{\dimexpr0.132911\PTwidth-2\tabcolsep\relax}}@{}}
+\toprule
+\multicolumn{7}{@{}>{\centering\arraybackslash}p{\PTwidth}@{}}{\textbf{Summary by assigned group}} \\*
+\hline
+ & \multicolumn{2}{>{\centering\arraybackslash}p{\dimexpr0.265823\PTwidth-2\tabcolsep\relax}}{Group 0} & \multicolumn{2}{>{\centering\arraybackslash}p{\dimexpr0.265823\PTwidth-2\tabcolsep\relax}}{Group 1} & \multicolumn{2}{>{\centering\arraybackslash}p{\dimexpr0.265823\PTwidth-2\tabcolsep\relax}}{Group 2} \\*
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+ & Mean (SD) & N & Mean (SD) & N & Mean (SD) & N \\*
+\hline
+Endline outcome 1 & 0.089 & 40 & 0.021 & 40 & 0.397 & 40 \\*
+ & (1.19) &  & (0.879) &  & (1.03) &  \\
+Endline outcome 2 & 38.53 & 27 & 40.86 & 40 & 42.54 & 40 \\*
+ & (9.37) &  & (8.82) &  & (7.98) &  \\
+Endline outcome 3 & 194.7 & 40 & 279.9 & 40 & 316.8 & 40 \\*
+ & (49.74) &  & (55.30) &  & (56.80) &  \\
+\hline
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\footnotesize
+\item \textit{Notes:} Synthetic endline outcomes defined in examples/stata/data.do; arm 0 is control. Unweighted N, arithmetic mean and sample SD from Stata summarize. Counts are variable-specific available observations; y2 has missing values. No inferential comparisons.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\endgroup

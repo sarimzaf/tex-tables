@@ -1,0 +1,45 @@
+% Native Stata/Mata pt_tables 2.4.0; rendered from saved companion results.
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\ifdefined\PTwidth\else\newlength{\PTwidth}\fi
+\setlength{\PTwidth}{15.800cm}
+\ifdim\PTwidth>\linewidth\setlength{\PTwidth}{\linewidth}\fi
+\begin{table}[htbp]\centering
+\begin{threeparttable}
+\caption{Automobile regressions with category and outcome headings}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.202532\PTwidth-\tabcolsep\relax}*{6}{>{\centering\arraybackslash}p{\dimexpr0.132911\PTwidth-2\tabcolsep\relax}}@{}}
+\toprule
+\multicolumn{7}{@{}>{\centering\arraybackslash}p{\PTwidth}@{}}{\textbf{Panel A: Conventional standard errors}} \\*
+\hline
+ & \multicolumn{2}{>{\centering\arraybackslash}p{\dimexpr0.265823\PTwidth-2\tabcolsep\relax}}{Market value} & \multicolumn{4}{>{\centering\arraybackslash}p{\dimexpr0.531646\PTwidth-2\tabcolsep\relax}}{Vehicle characteristics} \\*
+\cmidrule(lr){2-3} \cmidrule(lr){4-7}
+ & \multicolumn{2}{>{\centering\arraybackslash}p{\dimexpr0.265823\PTwidth-2\tabcolsep\relax}}{Price (USD)} & \multicolumn{2}{>{\centering\arraybackslash}p{\dimexpr0.265823\PTwidth-2\tabcolsep\relax}}{Mileage (mpg)} & \multicolumn{2}{>{\centering\arraybackslash}p{\dimexpr0.265823\PTwidth-2\tabcolsep\relax}}{Trunk space (cu. ft.)} \\*
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+ & No controls & Weight adjusted & No controls & Weight adjusted & No controls & Weight adjusted \\*
+\hline
+Foreign origin & 312.3 & 3637.0$^{***}$ & 4.95$^{***}$ & -1.65 & -3.34$^{***}$ & 0.560 \\*
+ & (754.4) & (668.6) & (1.36) & (1.08) & (1.02) & (1.01) \\*
+ & [0.294] & [0.001] & [0.002] & [0.149] & [0.002] & [0.242] \\
+\hline
+Control mean & 6072.4 & 6072.4 & 19.83 & 19.83 & 14.75 & 14.75 \\
+\midrule
+\multicolumn{7}{@{}>{\centering\arraybackslash}p{\PTwidth}@{}}{\textbf{Panel B: Heteroskedasticity-robust standard errors}} \\*
+\hline
+Foreign origin & 312.3 & 3637.0$^{***}$ & 4.95$^{***}$ & -1.65 & -3.34$^{***}$ & 0.560 \\*
+ & (701.8) & (643.2) & (1.54) & (1.13) & (0.906) & (0.945) \\*
+ & [0.281] & [0.001] & [0.003] & [0.176] & [0.002] & [0.290] \\
+\hline
+Control mean & 6072.4 & 6072.4 & 19.83 & 19.83 & 14.75 & 14.75 \\
+\hline
+N & 74 & 74 & 74 & 74 & 74 & 74 \\
+\hline
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\footnotesize
+\item \textit{Notes:} * $p<0.10$, ** $p<0.05$, *** $p<0.01$, using conventional p-values. Standard errors appear in round brackets. Square brackets contain sharpened q-values. Stata's 1978 automobile data; observational associations, not causal treatment effects. Price is in US dollars, mileage in miles per gallon and trunk space in cubic feet. Each column regresses its outcome on foreign origin, with vehicle weight (lb.) added in adjusted models. Panels use conventional and heteroskedasticity-robust OLS covariance, respectively, with residual-df t inference. No fixed effects or weights. Sharpened q-values use Anderson (2008) and BKY (2006), conventional p-values and a .001 grid; each panel and specification has a separate complete three-outcome family for the foreign-origin coefficient. RI is not applicable. Control means are domestic-car means in each model's estimation sample at the 1978 observation, not endline. All models use the same 74 cars, verified by observation IDs; N is shown in the final panel. Missing model variables are excluded.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\endgroup
