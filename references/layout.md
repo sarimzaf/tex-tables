@@ -1,7 +1,10 @@
 # Layout and notes
 
 The helper uses booktabs top/bottom rules, `\midrule` between panels, and a
-centered bold spanning panel heading followed by `\hline`. Outcome headings and
+centered bold spanning panel heading followed by `\hline` when more than one
+panel is displayed. A table with exactly one displayed panel omits that heading
+and its rule, including on continuation pages; keep its caption and column/group
+headings. Panel metadata remains in the companion DTA. Outcome headings and
 row labels use paragraph columns. Order comes from numeric order fields, never
 alphabetic IDs. The default is `\small`, 4pt column separation and 1.12 row stretch.
 Avoid solving overflow by shrinking the font. A user-requested different layout
@@ -63,6 +66,28 @@ still contain separate mean, SD and N cells; native `group_id`, `group_order`,
 `group_label`, and `statistic` map them explicitly to presentation groups. Other
 statistics or a requested flat layout require an explicit native renderer extension.
 
+## Numeric formatting
+
+Use comma thousands separators for every reported number with an absolute
+displayed value of at least 1,000, positive or negative, in table cells and
+footnotes. Examples: `1,000`, `-1,234.5`, `1,234,567.89`, and “10,000 replications”.
+The native formatter applies grouping after rounding, so a value displayed as
+1,000 also receives a comma. Preserve the existing decimal-place rules and the
+full-precision numeric DTA.
+
+Substantive notes are authored text, including when `notes_raw=1`; write their
+numbers with commas before assigning `char _dta[pt_notes]`. For dynamic numeric
+quantities, use the same native formatter instead of inserting an unformatted
+scalar. For example:
+
+```stata
+mata: st_local("draws_text", pt_fmt(10000, "count", 0))
+char _dta[pt_notes] "Randomization inference uses `draws_text' replications."
+```
+
+This example describes formatting only; claim RI replications only when they
+were actually run. The renderer does not rewrite arbitrary prose or raw TeX.
+
 ## Width and pagination
 
 Natural width is 3.2cm for labels plus 2.1cm per data column, capped at available
@@ -96,8 +121,9 @@ Multipage uses `longtable` with `threeparttablex`; wide and tall tables also use
 `pdflscape`. It is never wrapped in a float or resizebox. A panel starts on its
 own page/longtable segment; subsequent segments retain the table number. This
 explicit page boundary makes repeated headers unambiguous. Every continuation
-repeats the original caption with “(continued)”, outcome headings and the panel
-heading. Adjacent inference lines use `\\*` to keep effect blocks together;
+repeats the original caption with “(continued)” and outcome headings, and repeats
+the panel heading only for tables with multiple displayed panels.
+Adjacent inference lines use `\\*` to keep effect blocks together;
 headings are kept with following rows. A block taller than a page must be split
 manually into intelligible pieces, with inference clearly associated.
 

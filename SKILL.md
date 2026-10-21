@@ -26,11 +26,23 @@ are included in this skill.
    and unsupported statistical assumptions.
 2. For regression inference, read [inference and metadata](references/inference.md).
    Extract estimator-appropriate p-values. Adjust the complete intended family
-   before display filtering; default families are panel × treatment effect.
+   before display filtering. Define outcome families by a common substantive
+   domain inferred from outcome definitions and study context: for example,
+   GAD, PHQ and PSS belong to a mental-health domain. Panel or table placement
+   does not define a family. Distinguish primary composite indices from secondary
+   components: calculate component q-values within each domain separately from
+   the indices. Define the indices' primary-outcome testing family from the
+   analysis plan; do not automatically treat each index as a singleton. Ask before
+   adjustment when their roles or the index-family membership are unclear.
+   Keep treatment/effect families separate unless the
+   analysis plan specifies pooling; document the domain membership and any
+   planned time/specification boundaries. Ask when the context is ambiguous.
    Prefer Hess's `ritest` only with a documented assignment design. Ask for
    essential missing design information; keep unavailable RI missing in the data.
 3. Save model provenance as columns and table metadata as dataset characteristics.
-   Run `pt_adjust` on complete regression families, then `pt_validate`.
+   Encode outcome roles, planned outcome groups and effects in an explicit string family ID;
+   run `pt_adjust, family(planned_family)` on complete regression families,
+   record their scientific definition, then run `pt_validate`.
    For summaries use variables as rows and each group name once as a centered
    spanning heading above its Mean (SD) and N columns, with a `\cmidrule` beneath
    the span. Stack SD below mean and preserve each variable-specific count.
@@ -77,7 +89,18 @@ Avoid adjacent rules elsewhere. Give two- or three-column tables adequate width
 (widen the row/outcome-label column as well as all result/outcome-heading columns)
 (default minimum 85% of available width, without scaling text). Numeric precision uses the
 original magnitude: 3 decimals below 1, 2 below 100, otherwise 1. Probabilities
-always have 3 decimals; counts are integers. Never round the saved results.
+always have 3 decimals; counts are integers. Use comma thousands separators for
+every reported number whose absolute displayed value is at least 1,000, including
+negative values and numbers in footnotes (for example, `1,234`, `-1,234.5`,
+and “10,000 replications”). Apply this to authored notes as well as table cells;
+never round or insert formatting into the saved numeric results.
+When exactly one panel is displayed, omit its panel heading, including on
+continuation pages. Retain the table caption and column/group headings.
+
+Keep ad hoc tests, comparison exercises, and their generated files under the
+gitignored `skill-tests/` directory. Do not add private analysis inputs or test
+artifacts to the skill package or Git; reusable test scripts and curated public
+examples remain versioned.
 
 For reproducible examples, tests, dependencies, and known limits, read
 [verification](references/verification.md). Do not silently extend the statistical

@@ -24,13 +24,13 @@ def display_number(value, kind="number", decimals=-1):
     if kind == "count":
         if x < 0 or x != int(x):
             raise ValueError("Invalid count")
-        return str(int(x))
+        return f"{int(x):,}"
     places = (3 if kind == "probability" else decimals if decimals >= 0 else
               3 if abs(x) < 1 else 2 if abs(x) < 100 else 1)
     # Match Stata's decimal half-away-from-zero display, not Python's tie-to-even.
     rounded = Decimal(str(x)).quantize(Decimal(1).scaleb(-places), rounding=ROUND_HALF_UP)
-    result = f"{rounded:.{places}f}"
-    return result[1:] if result.startswith("-") and float(result) == 0 else result
+    result = f"{rounded:,.{places}f}"
+    return result[1:] if result.startswith("-") and rounded == 0 else result
 
 
 def main():

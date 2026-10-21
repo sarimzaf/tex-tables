@@ -10,8 +10,15 @@ run scripts/pt_tables.do
 mata: assert(pt_fmt(.99996,"number",-1)=="1.000")
 mata: assert(pt_fmt(99.9996,"number",-1)=="100.00")
 mata: assert(pt_fmt(100,"number",-1)=="100.0")
-mata: assert(pt_fmt(6179.25,"number",-1)=="6179.3")
-mata: assert(pt_fmt(-6179.25,"number",-1)=="-6179.3")
+mata: assert(pt_fmt(6179.25,"number",-1)=="6,179.3")
+mata: assert(pt_fmt(-6179.25,"number",-1)=="-6,179.3")
+mata: assert(pt_fmt(999,"count",0)=="999")
+mata: assert(pt_fmt(1000,"count",0)=="1,000")
+mata: assert(pt_fmt(-1000,"number",0)=="-1,000")
+mata: assert(pt_fmt(999.96,"number",1)=="1,000.0")
+mata: assert(pt_fmt(-999.96,"number",1)=="-1,000.0")
+mata: assert(pt_fmt(1234567.89,"number",2)=="1,234,567.89")
+mata: assert(pt_fmt(-1234567.89,"number",2)=="-1,234,567.89")
 mata: assert(pt_fmt(-.00001,"number",-1)=="0.000")
 mata: assert(pt_fmt(.a,"number",-1)==char(92)+"mbox{-{}-}")
 mata: assert(pt_fmt(.z,"number",-1)==char(92)+"mbox{-{}-}")
@@ -47,6 +54,16 @@ forvalues j=1/3 {
     }
 }
 * Independently compare the Mata validator with the identified Stata ado.
+* Domain-based families can contain just one available or missing hypothesis.
+foreach singleton in 0 .001 .04 .5 .8 1 . .a {
+    clear
+    set obs 1
+    generate double p=`singleton'
+    fdr_sharpened_qvalues p, generate(q_reference)
+    mata: single_q=pt_bky(st_data(.,"p")); single_reference=st_data(.,"q_reference")
+    mata: assert(missing(single_q)==missing(single_reference))
+    mata: assert(missing(single_q) | abs(single_q-single_reference)<1e-12)
+}
 clear
 input double p
 0
@@ -222,10 +239,40 @@ replace header2_id=""
 replace header2_label=""
 replace display=0 if column_order==2
 pt_validate
-mata: assert(rows(pt_head(selectindex(st_data(.,"display"):==1),5,1,1))>0)
+mata: assert(rows(pt_head(selectindex(st_data(.,"display"):==1),5,1,1,1))>0)
 * Export rejects wrong extension, same source/companion, implicit replacement.
 capture mkdir examples/stata/output/test_artifacts
 capture mkdir examples/stata/output/test_artifacts/archive
+* One displayed panel has no heading, including longtable continuation headers.
+* A hidden second panel must not cause a heading; note quantities use pt_fmt too.
+tempfile singlestage
+foreach example in standard summary shared {
+    foreach layout in standard multipage {
+        use examples/stata/output/`example'.dta, clear
+        quietly summarize panel_order, meanonly
+        replace display=0 if panel_order!=r(min)
+        replace panel_title="SINGLE_PANEL_SENTINEL"
+        char _dta[pt_layout] "`layout'"
+        mata: st_local("quantity", pt_fmt(10000,"count",0))
+        char _dta[pt_notes] "Formatting test quantity: `quantity'."
+        save `singlestage', replace
+        pt_export using `singlestage', saving("examples/stata/output/test_artifacts/single_`example'_`layout'.tex") replace project("examples/stata/output/test_artifacts")
+        tempname singlecheck
+        file open `singlecheck' using examples/stata/output/test_artifacts/single_`example'_`layout'.tex, read text
+        local captions=0
+        local notes=0
+        file read `singlecheck' line
+        while r(eof)==0 {
+            assert strpos(`"`line'"',"SINGLE_PANEL_SENTINEL")==0
+            if strpos(`"`line'"',"\caption") local ++captions
+            if strpos(`"`line'"',"Formatting test quantity: 10,000.") local ++notes
+            file read `singlecheck' line
+        }
+        file close `singlecheck'
+        assert `captions'==cond("`layout'"=="multipage",2,1)
+        assert `notes'==1
+    }
+}
 * Changed panel headings repeat independently of a verified common N.
 use `grouped', clear
 replace header1_label="Vehicle dimensions" if panel_id=="p2" & header1_id=="characteristics"

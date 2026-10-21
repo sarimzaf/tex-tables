@@ -27,8 +27,8 @@ def number(value, probability=False, count=False):
     value = float(value)
     digits = 0 if count else 3 if probability or abs(value) < 1 else 2 if abs(value) < 100 else 1
     rounded = Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP)
-    result = f"{rounded:.{digits}f}"
-    return result[1:] if result.startswith("-") and float(result) == 0 else result
+    result = f"{rounded:,.{digits}f}"
+    return result[1:] if result.startswith("-") and rounded == 0 else result
 
 def stars(p):
     return "***" if p < .01 else "**" if p < .05 else "*" if p < .10 else ""

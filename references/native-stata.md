@@ -16,19 +16,30 @@ counts, posting and export. Statistical procedures are not hidden in Python.
 adopath ++ scripts
 run scripts/pt_tables.do
 * Estimate and post unrounded cells/provenance, then set dataset characteristics.
-pt_adjust                         // COMPLETE intended regression families
+* Map outcome roles and domains; separate primary indices from secondary components.
+* Construct planned_family from the planned outcome group, effect and scope.
+pt_adjust, family(planned_family)  // COMPLETE planned families
+* Set pt_q_family_definition and notes to describe the actual membership/scope.
 pt_validate
 tempfile stage
 save `stage'
 pt_export using `stage', saving("results/table.tex") replace project(".")
 ```
 
-`pt_adjust` uses bundled `fdr_sharpened_qvalues.ado` at .001 resolution,
-conventional p-values, and `panel_id` by `effect_id` families, independently of
-display-row IDs. Use
-`pt_adjust, family(planned_family)` for an explicitly specified string family
-variable. Record its scientific definition in notes and
-`char _dta[pt_q_family_definition]`. Adjust before display filtering.
+`pt_adjust` uses bundled `fdr_sharpened_qvalues.ado` at .001 resolution and
+conventional p-values. The skill requires `pt_adjust, family(planned_family)`:
+map outcomes to substantive domains and primary/secondary roles from their context
+and analysis plan. Adjust secondary components within domains separately from
+primary composite indices. Define the indices' primary-outcome family explicitly;
+ask when roles or index membership are unclear, rather than assigning each index
+its own family. Encode the role and planned outcome group, treatment/effect and
+any planned analysis scope in a string family ID.
+Panel/table boundaries do not determine families. See the mapping and cross-table
+guidance in [inference](inference.md#sharpened-q-values).
+Record the scientific definition in notes and set
+`char _dta[pt_q_family_definition]` after adjustment. The bare command retains
+`panel_id` by `effect_id` grouping solely for compatibility with existing callers;
+it cannot infer substantive domains. Adjust before display filtering.
 `display=0` hides cells without removing hypotheses. Recompute if families change.
 The identified ado uses integer ranks, so more than 32,740 nonmissing tests per
 family are rejected. Other adjustment sources/methods need an explicit adapter.

@@ -6,6 +6,14 @@
 /data/
 /skill-tests/
 /skills/
+# Generated test runs and comparison artifacts (keep reusable test source tracked)
+**/test_artifacts/
+**/test-results/
+**/test-output/
+**/tests/output/
+.pytest_cache/
+.coverage
+htmlcov/
 .env
 .env.*
 *.pem

@@ -355,12 +355,17 @@ string scalar pt_text(real scalar i, string scalar v) {
 }
 string scalar pt_fmt(real scalar x, string scalar kind, real scalar dec) {
     string scalar s
+    real scalar endint,start,i
     if(missing(x)) return(char(92)+"mbox{-{}-}")
     if(kind=="count") dec=0
     else if(kind=="probability") dec=3
     else if(dec<0) dec=(abs(x)<1 ? 3 : (abs(x)<100 ? 2 : 1))
     s=strtrim(strofreal(x,"%24."+strofreal(dec)+"f"))
     if(substr(s,1,1)=="-" & strtoreal(s)==0) s=substr(s,2,.)
+    endint=strpos(s,".")-1
+    if(endint<0) endint=strlen(s)
+    start=(substr(s,1,1)=="-" ? 2 : 1)
+    for(i=endint-3;i>=start;i=i-3) s=substr(s,1,i)+","+substr(s,i+1,.)
     return(s)
 }
 string scalar pt_stars(real scalar p) {
@@ -411,7 +416,7 @@ real colvector pt_bky(real colvector p) {
     real scalar k,qgrid,a,r1,r2,den,cut
     ans=J(rows(p),1,.)
     I=selectindex(p:<.)
-    if(!rows(I)) return(ans)
+    if(!length(I)) return(ans)
     ord=order(p[I],1); I=I[ord]; ps=p[I]; rank=(1::rows(I))
     ans[I]=J(rows(I),1,1)
     for(k=1000;k>=1;k--) {
@@ -419,10 +424,10 @@ real colvector pt_bky(real colvector p) {
         // These affect exact rejection boundaries (for example p=1).
         qgrid=strtoreal(strofreal(k/1000,"%18.0g"))
         a=strtoreal(strofreal(qgrid/(1+qgrid),"%18.0g"))
-        r1=max((0\select(rank,ps:<=a:*rank/rows(I))))
+        r1=max(rank:*(ps:<=a:*rank/rows(I)))
         den=rows(I)-r1
         cut=(den<=0 ? 1 : min((1,strtoreal(strofreal(a*(rows(I)/den),"%18.0g")))))
-        r2=max((0\select(rank,ps:<=cut:*rank/rows(I))))
+        r2=max(rank:*(ps:<=cut:*rank/rows(I)))
         if(r2>0) ans[I[1::r2]]=J(r2,1,qgrid)
     }
     return(ans)
@@ -437,7 +442,7 @@ void pt_check_q() {
         expected=pt_bky(st_data(I,"q_source")); actual=st_data(I,"q")
         if(any(missing(expected):!=missing(actual))) pt_fail("Missing q inconsistent with its source family")
         I=selectindex(expected:<.)
-        if(rows(I)) if(any(abs(expected[I]-actual[I]):>1e-12)) pt_fail("Q-values disagree with complete saved family; recompute adjustment")
+        if(length(I)) if(any(abs(expected[I]-actual[I]):>1e-12)) pt_fail("Q-values disagree with complete saved family; recompute adjustment")
     }
 }
 void pt_check_contrasts() {
@@ -569,14 +574,15 @@ real scalar pt_find(real colvector I,string scalar col) {
     J=pt_select(I,"column_id",col)
     return(rows(J) ? J[1] : .)
 }
-string colvector pt_head(real colvector I,real scalar width,real scalar continued,real scalar headings) {
+string colvector pt_head(real colvector I,real scalar width,real scalar continued,real scalar headings,real scalar panel_heading) {
     real colvector C
     string colvector out
     string rowvector labels,groups
     string scalar b,title,rules,group_spec
     real scalar c,groupfrac,padded
     b=char(92); title=pt_text(I[1],"panel_title")+(continued ? " (continued)" : "")
-    out=b+"multicolumn{"+strofreal(width+1)+"}{@{}>{"+b+"centering"+b+"arraybackslash}p{"+b+"PTwidth}@{}}{"+b+"textbf{"+title+"}} "+b+b+"*" \ b+"hline"
+    out=J(0,1,"")
+    if(panel_heading) out=b+"multicolumn{"+strofreal(width+1)+"}{@{}>{"+b+"centering"+b+"arraybackslash}p{"+b+"PTwidth}@{}}{"+b+"textbf{"+title+"}} "+b+b+"*" \ b+"hline"
     if(headings) {
         labels=""
         if(pt_m("kind")=="regression") {
@@ -689,6 +695,7 @@ void pt_render(string scalar destination) {
             if(pt_s(C[c],"sample_ids")=="" | pt_s(C[c],"sample_ids")!=pt_s(firstC[c],"sample_ids") | pt_s(C[c],"sample_namespace")!=pt_s(firstC[c],"sample_namespace") | pt_n(C[c],"n_obs")!=pt_n(firstC[c],"n_obs")) shared=0
         }
         nlines=nlines+rows(pt_body(I,width,1))+(pt_m("kind")=="summary" ? 9 : 7)
+        if(rows(P)==1) nlines=nlines-2
         if(pt_m("kind")=="regression") nlines=nlines+rows(pt_reg_headers(C,width))
     }
     shared=shared & pt_opt("share_n",1)
@@ -732,7 +739,7 @@ void pt_render(string scalar destination) {
         for(p=1;p<=rows(P);p++) {
             I=pt_select(ALL,"panel_id",pt_s(P[p],"panel_id"))
             if(p>1) out=out\b+"midrule"
-            out=out\pt_head(I,width,0,p==1 | !heads)\pt_body(I,width,p==rows(P) | !shared)
+            out=out\pt_head(I,width,0,p==1 | !heads,rows(P)>1)\pt_body(I,width,p==rows(P) | !shared)
         }
         out=out\b+"hline"\b+"bottomrule"\b+"end{tabular}"\b+"begin{tablenotes}[flushleft]"+b+"footnotesize"\notes\b+"end{tablenotes}"\b+"end{threeparttable}"\b+"end{table}"
     }
@@ -740,8 +747,8 @@ void pt_render(string scalar destination) {
         for(p=1;p<=rows(P);p++) {
             I=pt_select(ALL,"panel_id",pt_s(P[p],"panel_id"))
             if(p>1) out=out\b+"clearpage"\b+"addtocounter{table}{-1}"
-            out=out\b+"begin{ThreePartTable}"\b+"begin{longtable}{"+spec+"}"\b+"caption{"+caption+(p>1 ? " (continued)" : "")+"}"+(p==1 ? label : "")+b+b\b+(p==1 ? "toprule" : "midrule")\pt_head(I,width,0,1)\b+"endfirsthead"
-            out=out\b+"caption[]{"+caption+" (continued)}"+b+b\b+"toprule"\pt_head(I,width,1,1)\b+"endhead"\b+"midrule"\b+"multicolumn{"+span+"}{r}{Continued on next page}"+b+b\b+"endfoot"\b+"noalign{"+b+"vskip0pt}"\b+"endlastfoot"
+            out=out\b+"begin{ThreePartTable}"\b+"begin{longtable}{"+spec+"}"\b+"caption{"+caption+(p>1 ? " (continued)" : "")+"}"+(p==1 ? label : "")+b+b\b+(p==1 ? "toprule" : "midrule")\pt_head(I,width,0,1,rows(P)>1)\b+"endfirsthead"
+            out=out\b+"caption[]{"+caption+" (continued)}"+b+b\b+"toprule"\pt_head(I,width,1,1,rows(P)>1)\b+"endhead"\b+"midrule"\b+"multicolumn{"+span+"}{r}{Continued on next page}"+b+b\b+"endfoot"\b+"noalign{"+b+"vskip0pt}"\b+"endlastfoot"
             body=pt_body(I,width,p==rows(P) | !shared)
             if(p==rows(P)) body[rows(body)]=body[rows(body)]+"*"
             out=out\body

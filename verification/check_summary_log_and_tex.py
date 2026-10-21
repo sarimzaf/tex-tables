@@ -30,8 +30,8 @@ def number(value, count=False):
         return r"\mbox{-{}-}"
     digits = 0 if count else 3 if abs(value) < 1 else 2 if abs(value) < 100 else 1
     rounded = Decimal(str(float(value))).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP)
-    result = f"{rounded:.{digits}f}"
-    return result[1:] if result.startswith("-") and float(result) == 0 else result
+    result = f"{rounded:,.{digits}f}"
+    return result[1:] if result.startswith("-") and rounded == 0 else result
 
 for table in ["auto_summary", "auto_summary_repair_panels"]:
     subset = data[data.table_id.eq(table)]

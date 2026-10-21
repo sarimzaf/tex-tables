@@ -145,6 +145,26 @@ control-mean rules, terminal rules, captions, repeated headings, notes, and clip
 Correct problems and repeat affected checks. Repeat in the actual manuscript,
 because geometry, fonts and surrounding floats can change pagination.
 
+## Singleton-family validation, 2026-10-21
+
+Domain-based grouping can produce families with one hypothesis. The Mata
+validator handles singleton and all-missing families without empty-selection
+dimension errors. Tests compare it with the unchanged bundled ado at p=0,
+.001, .04, .5, .8, 1 and ordinary/extended missing values. The complete native
+suite and independent regression/summary checks pass.
+
+## Formatting update validation, 2026-10-20
+
+The native tests cover comma grouping for positive/negative thousands and
+millions, rounding across 1,000, and formatted note quantities. Single displayed
+panels omit their titles in regression and summary tables, including longtable
+continuation headers and a table whose other panel is hidden. Multiple-panel
+headings remain present. All fifteen examples compile and pass PDF numerical
+checks; all 32 rendered pages were visually reviewed. Independent checks pass
+for all 420 regression and summary log records and their displayed cells.
+Ad hoc runs belong under gitignored `skill-tests/`; generated artifacts must
+not enter the package. Reusable test scripts and curated examples are retained.
+
 ## Validation record: version 2.4.0, 2026-10-18
 
 - All fifteen examples and the native suite passed in Stata 17. The new ordinary

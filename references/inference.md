@@ -27,10 +27,43 @@ can differ; document both.
 
 ## Sharpened q-values
 
-Default: Benjamini, Krieger and Yekutieli (2006) two-stage sharpened FDR, associated
-with Anderson (2008), conventional p-values across every outcome for each
-panel × treatment effect. Multiple treatments form separate families unless the
-analysis plan specifies otherwise. Native `pt_adjust` directly calls the bundled
+Use Benjamini, Krieger and Yekutieli (2006) two-stage sharpened FDR, associated
+with Anderson (2008), on conventional p-values within a common substantive
+outcome domain. Determine that domain from the outcomes' definitions, measurement
+instruments, study context and analysis plan. For example, GAD, PHQ and PSS can
+form one mental-health outcome family. Record an explicit outcome-to-domain
+mapping; do not infer membership solely from variable names, panel/table
+placement or observed p-values. Use an existing planned mapping when available;
+ask for clarification if the substantive context does not resolve membership.
+
+Distinguish primary composite indices from secondary component outcomes using
+the analysis plan and intended claims. Calculate secondary-component q-values
+within each substantive domain, excluding the primary composite index from that
+component family. For example, a primary mental-health index is separate from
+the secondary family containing PHQ, GAD and PSS. Record each outcome's role
+alongside its domain; do not infer primary status merely because it is an index.
+Ask before adjustment if the roles are unclear or the plan treats indices and
+components as coequal outcomes without specifying how to handle them.
+
+Define a separate primary-outcome testing family for the indices from the
+analysis plan and the claims they jointly support. That family may span domains;
+do not automatically create one singleton family per index or group indices
+because they share a table. Ask if its membership is unclear. When q-values are
+requested for indices, calculate them within that explicitly defined index
+family. If the plan instead specifies FWER or another primary-outcome procedure,
+honor it through an appropriate adapter rather than substituting the bundled
+FDR method. Report the component and primary-index families separately in the
+notes; separate adjustments do not establish error control over their combined
+claims. Do not choose roles or family boundaries from observed significance.
+
+By default, adjust each planned outcome group separately for each treatment/effect.
+Keep derived effects in their own effect families unless the analysis plan pools
+them. A panel can contain multiple domains, and one domain can span panels or
+tables. Determine any separation by follow-up time, population or specification
+from the intended scientific comparisons and analysis plan, not automatically
+from panel IDs. Document those boundaries along with domain membership.
+
+Native `pt_adjust` directly calls the bundled
 `scripts/fdr_sharpened_qvalues.ado` (Stata adaptation dated 2026-04-15), using
 its identified descending .001 grid. The Mata validator recomputes that algorithm
 independently when checking saved results. No Python is involved.
@@ -44,9 +77,36 @@ this is a computational grid, not precision added to the underlying estimates.
 Ties use step-up ranks. Q can be less than conventional p. FDR validity still
 depends on the procedure's assumptions and scientific family specification.
 
-Native command: `pt_adjust`, or `pt_adjust, family(planned_family)` for pooled
-or other planned string-valued families. Record the scientific definition in
-notes and `char _dta[pt_q_family_definition]`. Source p-values are preserved in
+Use `pt_adjust, family(planned_family)` with an explicit string-valued family ID.
+For a single planned time/population/specification scope, assign `domain_id`
+and `outcome_role` from the substantive context and plan. Explicitly map each
+outcome to `family_group_id`, incorporating its role: for example,
+`secondary_components:mental_health` for the components and
+`primary_indices:main_outcomes` for indices in a separately justified primary
+family. The latter is an example ID, not a rule to pool every index. Then:
+
+```stata
+assert domain_id!="" & effect_id!="" if row_type=="coef"
+assert outcome_role!="" & family_group_id!="" if row_type=="coef"
+generate str244 planned_family = family_group_id+":"+effect_id if row_type=="coef"
+pt_adjust, family(planned_family)
+char _dta[pt_q_family_definition] "Components by domain, primary indices separately; each planned group x effect; membership and scope documented in notes"
+```
+
+Use stable unambiguous IDs and add an explicit scope ID when the analysis plan
+requires separate time/population/specification families. Describe actual domain
+members, outcome roles and the separate primary-index family in the notes
+(for example, secondary mental-health components: GAD, PHQ, PSS). Set the scientific
+definition in `char _dta[pt_q_family_definition]` after `pt_adjust`, which writes
+generic method metadata. The bare `pt_adjust` command retains a legacy
+panel-by-effect fallback for compatibility; do not use that fallback to choose
+families in new analyses. Bundled examples retain their demonstration-specific
+families and are not a prescription for empirical domain membership.
+
+When a family spans tables, collect and adjust its complete hypothesis universe
+together. Retain those complete family records in each staged export and use
+`display=0` for members not shown in that table; do not adjust each table fragment
+separately. Source p-values are preserved in
 `q_source`; the native helper uses conventional p-values. Another requested
 source needs an explicit reviewed adapter with matching validator/provenance.
 Recompute if hypotheses, source p-values, or family membership change. Prepare
